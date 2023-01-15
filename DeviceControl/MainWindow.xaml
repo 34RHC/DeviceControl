@@ -1,0 +1,36 @@
+﻿<Window x:Class="DeviceControl.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DeviceControl"
+        mc:Ignorable="d"
+        Title="Device Control" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <TextBox x:Name="setPointTextBox" Text="{Binding SetPoint, UpdateSourceTrigger=PropertyChanged}" />
+            <Label x:Name="currentTemperatureLabel" Content="{Binding CurrentTemperature}" />
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="startAgitationButton" Content="Start Agitation" Command="{Binding StartAgitationCommand}" />
+                <Button x:Name="stopAgitationButton" Content="Stop Agitation" Command="{Binding StopAgitationCommand}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="startHeatingButton" Content="Start Heating" Command="{Binding StartHeatingCommand}" />
+                <Button x:Name="stopHeatingButton" Content="Stop Heating" Command="{Binding StopHeatingCommand}" />
+            </StackPanel>
+            <Button x:Name="setTemperatureSetPointButton" Content="Set Temperature Set Point" Command="{Binding SetTemperatureSetPointCommand}" />
+            <StackPanel Orientation="Horizontal">
+                <Label x:Name="agitationLabel" Content="Agitation:" />
+                <Rectangle x:Name="agitationLed" Width="20" Height="20" Fill="{Binding IsAgitating, Converter={StaticResource LedColorConverter}}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label x:Name="heatingLabel" Content="Heating:" />
+                <Rectangle x:Name="heatingLed" Width="20" Height="20" Fill="{Binding IsHeating, Converter={StaticResource LedColorConverter}}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label x:Name="regulationLabel" Content="Regulation:" />
+                <Rectangle x:Name="regulationLed" Width="20" Height="20" Fill="{Binding IsRegulating, Converter={StaticResource LedColorConverter}}" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
