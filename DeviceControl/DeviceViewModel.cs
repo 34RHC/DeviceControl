@@ -14,8 +14,8 @@ namespace DeviceControl
         private Device _device;
         private float _setPoint;
         private float _currentTemperature;
-        private bool _isAgitating;
-        private bool _isHeating;
+        private bool _isAgitationON;
+        private bool _isHeatingON;
 
         public ICommand StartAgitationCommand { get; set; }
         public ICommand StopAgitationCommand { get; set; }
@@ -59,48 +59,48 @@ namespace DeviceControl
             }
         }
 
-        public bool IsAgitating
+        public bool IsAgitationON
         {
-            get { return _isAgitating; }
+            get { return _isAgitationON; }
             set
             {
-                _isAgitating = value;
-                OnPropertyChanged("IsAgitating");
+                _isAgitationON = value;
+                OnPropertyChanged("IsAgitationON");
             }
         }
 
-        public bool IsHeating
+        public bool IsHeatingON
         {
-            get { return _isHeating; }
+            get { return _isHeatingON; }
             set
             {
-                _isHeating = value;
-                OnPropertyChanged("IsHeating");
+                _isHeatingON = value;
+                OnPropertyChanged("IsHeatingON");
             }
         }
 
         private void StartAgitation()
         {
             _device.StartAgitation();
-            IsAgitating = true;
+            IsAgitationON = true;
         }
 
         private void StopAgitation()
         {
             _device.StopAgitation();
-            IsAgitating = false;
+            IsAgitationON = false;
         }
 
         private void StartHeating()
         {
             _device.StartHeating();
-            IsHeating = true;
+            IsHeatingON = true;
         }
 
         private void StopHeating()
         {
             _device.StopHeating();
-            IsHeating = false;
+            IsHeatingON = false;
         }
 
         private void SetTemperatureSetPoint()

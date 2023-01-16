@@ -4,7 +4,11 @@
              xmlns:local="clr-namespace:DeviceControl"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <ResourceDictionary Source="/Resources.xaml">
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <local:LedColorConverter x:Key="LedColorConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

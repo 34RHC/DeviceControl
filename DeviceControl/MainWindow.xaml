@@ -24,11 +24,11 @@
             <Button x:Name="setTemperatureSetPointButton" Content="Set Temperature Set Point" Command="{Binding SetTemperatureSetPointCommand}" />
             <StackPanel Orientation="Horizontal">
                 <Label x:Name="agitationLabel" Content="Agitation:" />
-                <Rectangle x:Name="agitationLed" Width="20" Height="20" Fill="{Binding IsAgitating, Converter={StaticResource LedColorConverter}}" />
+                <Rectangle x:Name="agitationLed" Width="20" Height="20" Fill="{Binding IsAgitationON, Converter={StaticResource LedColorConverter}}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label x:Name="heatingLabel" Content="Heating:" />
-                <Rectangle x:Name="heatingLed" Width="20" Height="20" Fill="{Binding IsHeating, Converter={StaticResource LedColorConverter}}" />
+                <Rectangle x:Name="heatingLed" Width="20" Height="20" Fill="{Binding IsHeatingON, Converter={StaticResource LedColorConverter}}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label x:Name="regulationLabel" Content="Regulation:" />
