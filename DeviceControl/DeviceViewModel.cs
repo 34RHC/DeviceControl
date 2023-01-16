@@ -17,6 +17,8 @@ namespace DeviceControl
         private bool _isAgitationON;
         private bool _isHeatingON;
 
+        private StateMachine _stateMachine;
+
         public ICommand StartAgitationCommand { get; set; }
         public ICommand StopAgitationCommand { get; set; }
         public ICommand StartHeatingCommand { get; set; }
@@ -32,6 +34,8 @@ namespace DeviceControl
             StopHeatingCommand = new RelayCommand(StopHeating);
             SetTemperatureSetPointCommand = new RelayCommand(SetTemperatureSetPoint);
             _setPoint = _device.GetTemperatureSetPoint();
+
+            _stateMachine = new StateMachine();
         }
 
         public void ClosePort()
@@ -61,7 +65,9 @@ namespace DeviceControl
 
         public bool IsAgitationON
         {
-            get { return _isAgitationON; }
+
+            get { return _stateMachine.CurrentState == StateMachine.States.Agitating || _stateMachine.CurrentState == StateMachine.States.AgitatingAndHeating; }
+            //get { return _isAgitationON; }
             set
             {
                 _isAgitationON = value;
@@ -82,6 +88,16 @@ namespace DeviceControl
         private void StartAgitation()
         {
             _device.StartAgitation();
+            _stateMachine.ChangeState(StateMachine.States.Agitating);
+            if (_stateMachine.CurrentState == StateMachine.States.Heating)
+            {
+                _stateMachine.ChangeState(StateMachine.States.AgitatingAndHeating);
+            }
+            else
+            {
+                _stateMachine.ChangeState(StateMachine.States.Agitating);
+            }
+
             IsAgitationON = true;
         }
 
@@ -114,6 +130,41 @@ namespace DeviceControl
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private void UpdateLeds()
+        {
+            switch (stateMachine.CurrentState)
+            {
+                case StateMachine.States.Agitating:
+                    IsAgitationON = true;
+                    IsHeatingON = false;
+                    //IsRegulatingON = false;
+                    break;
+                case StateMachine.States.Heating:
+                    IsAgitationON = false;
+                    IsHeatingON = true;
+                    //IsRegulatingON = false;
+                    break;
+                case StateMachine.States.AgitatingAndHeating:
+                    IsAgitationON = true;
+                    IsHeatingON = true;
+                    //IsRegulatingON = false;
+                    break;
+                case StateMachine.States.Regulating:
+                    IsAgitationON = false;
+                    IsHeatingON = false;
+                    //IsRegulatingON = true;
+                    break;
+                case StateMachine.States.Stopped:
+                    IsAgitationON = false;
+                    IsHeatingON = false;
+                    //IsRegulating = false;
+                    break;
+            }
+        }
+        private void OnStateChanged(object sender, EventArgs e)
+        {
+            UpdateLeds();
         }
     }
 
