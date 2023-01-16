@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace DeviceControl
 {
-    class DeviceViewModel
+    class DeviceViewModel : INotifyPropertyChanged
     {
         private Device _device;
         private float _setPoint;

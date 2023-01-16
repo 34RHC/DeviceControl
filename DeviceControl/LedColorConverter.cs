@@ -19,7 +19,7 @@ namespace DeviceControl
             }
             else
             {
-                return new SolidColorBrush(Colors.LightGreen);
+                return new SolidColorBrush(Colors.Gray);
             }
         }
 
