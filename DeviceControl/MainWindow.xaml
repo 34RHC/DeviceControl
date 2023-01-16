@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:DeviceControl"
         mc:Ignorable="d"
         Title="Device Control" Height="450" Width="800">
+    <Window.Resources>
+        <local:LedColorConverter x:Key="LedColorConverter"/>
+    </Window.Resources>
     <Grid>
         <StackPanel>
             <TextBox x:Name="setPointTextBox" Text="{Binding SetPoint, UpdateSourceTrigger=PropertyChanged}" />

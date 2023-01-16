@@ -4,10 +4,7 @@
              xmlns:local="clr-namespace:DeviceControl"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Resources.xaml">
         </ResourceDictionary>
     </Application.Resources>
 </Application>
