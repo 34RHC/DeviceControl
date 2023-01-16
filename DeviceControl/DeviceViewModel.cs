@@ -133,7 +133,7 @@ namespace DeviceControl
         }
         private void UpdateLeds()
         {
-            switch (stateMachine.CurrentState)
+            switch (_stateMachine.CurrentState)
             {
                 case StateMachine.States.Agitating:
                     IsAgitationON = true;
@@ -165,6 +165,20 @@ namespace DeviceControl
         private void OnStateChanged(object sender, EventArgs e)
         {
             UpdateLeds();
+        }
+
+        public void UpdateDeviceState()
+        {
+            //string deviceState = _device.GetDeviceState();
+            if (deviceState == "Agitating")
+            {
+                _stateMachine.ChangeState(StateMachine.States.Agitating);
+            }
+            else if (deviceState == "Heating")
+            {
+                _stateMachine.ChangeState(StateMachine.States.Heating);
+            }
+            //...
         }
     }
 
