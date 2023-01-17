@@ -36,9 +36,15 @@ namespace DeviceControl
             _setPoint = _device.GetTemperatureSetPoint();
 
             _stateMachine = new StateMachine();
+            _stateMachine.StateChanged+= OnStateChanged;
         }
 
-        public void ClosePort()
+        public void Connect()
+        {
+            _device.OpenPort();
+        }
+
+        public void Disconnect()
         {
             _device.ClosePort();
         }
@@ -77,7 +83,8 @@ namespace DeviceControl
 
         public bool IsHeatingON
         {
-            get { return _isHeatingON; }
+            get { return _stateMachine.CurrentState == StateMachine.States.Heating || _stateMachine.CurrentState == StateMachine.States.AgitatingAndHeating; }
+            //get { return _isHeatingON; }
             set
             {
                 _isHeatingON = value;
@@ -88,7 +95,7 @@ namespace DeviceControl
         private void StartAgitation()
         {
             _device.StartAgitation();
-            _stateMachine.ChangeState(StateMachine.States.Agitating);
+            //_stateMachine.ChangeState(StateMachine.States.Agitating);
             if (_stateMachine.CurrentState == StateMachine.States.Heating)
             {
                 _stateMachine.ChangeState(StateMachine.States.AgitatingAndHeating);
@@ -104,18 +111,46 @@ namespace DeviceControl
         private void StopAgitation()
         {
             _device.StopAgitation();
+            if (IsHeatingON) 
+            { 
+                _stateMachine.ChangeState(StateMachine.States.Heating); 
+            }
+            else 
+            { 
+                _stateMachine.ChangeState(StateMachine.States.Stopped); 
+            }
+
             IsAgitationON = false;
         }
 
         private void StartHeating()
         {
             _device.StartHeating();
+            //_stateMachine.ChangeState(StateMachine.States.Heating);
+            if (_stateMachine.CurrentState == StateMachine.States.Agitating)
+            {
+                _stateMachine.ChangeState(StateMachine.States.AgitatingAndHeating);
+            }
+            else
+            {
+                _stateMachine.ChangeState(StateMachine.States.Heating);
+            }
+
             IsHeatingON = true;
         }
 
         private void StopHeating()
         {
             _device.StopHeating();
+            if (IsAgitationON)
+            {
+                _stateMachine.ChangeState(StateMachine.States.Agitating);
+            }
+            else
+            {
+                _stateMachine.ChangeState(StateMachine.States.Stopped);
+            }
+
             IsHeatingON = false;
         }
 
@@ -170,6 +205,7 @@ namespace DeviceControl
         public void UpdateDeviceState()
         {
             //string deviceState = _device.GetDeviceState();
+            string deviceState = "Stopped";
             if (deviceState == "Agitating")
             {
                 _stateMachine.ChangeState(StateMachine.States.Agitating);

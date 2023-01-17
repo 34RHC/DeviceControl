@@ -84,5 +84,4 @@ namespace DeviceControl
             return _setPoint;
         }
     }
-
 }
